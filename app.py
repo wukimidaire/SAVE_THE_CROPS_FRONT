@@ -1,8 +1,11 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
+import requests
+import time # needed for adding a delay (optional)
 # Added for image handling
 from PIL import Image
+
 
 '''
 # Save The Crops Front
@@ -11,34 +14,47 @@ This front queries the Save The Crops [save_the_crops API](https://taxifare.lewa
 '''
 
 
-# Add a placeholder image to display initially
-
+# adds a placeholder image to display initially
 placeholder = Image.open("/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/leaf_area.webp")
+
+# displays initial placeholder image
 st.image(placeholder, use_column_width=True)
 
 with st.form(key='params_for_api'):
 
     # Upload image file
     uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
-    ## test which image types are working and exclude those from the type
 
     if st.form_submit_button("Upload"):
         if uploaded_file is not None:
-            # Try opening the image using PIL
-            try:
-                img = Image.open(uploaded_file)
-                st.image(img, use_column_width=True)  # Display uploaded image
-            except:
-                st.error("Invalid image format. Please select a valid image file.")
+            # Convert uploaded image to bytes
+            img_bytes = uploaded_file.read()
+
+            # Send image data to the backend API
+            files = {'image': (uploaded_file.name, img_bytes, uploaded_file.type)}
+            save_the_crops_url = 'https://taxifare.lewagon.ai/predict'
+
+            # Display loading spinner while waiting for API response
+            with st.spinner("Predicting crop species..."):
+                # Introduce a 10-second delay
+                time.sleep(10) # optional, only want to use this for testing with the backend api
+
+                # sends the request and process the response
+                response = requests.post(save_the_crops_url, files=files)
+
+                # handles API response and display prediction
+                if response.status_code == 200:
+                    try:
+                        prediction = response.json()
+                        pred = prediction['crop species']  # Assuming the key is 'crop species'
+                        st.header(f'Predicted crop species: {round(pred, 2)}')
+
+                        # displays uploaded image, its overwrites the placeholder
+                        st.image(uploaded_file, use_column_width=True, key="uploaded_image")
+
+                    except (KeyError, ValueError) as e:
+                        st.error(f"Error parsing API response: {e}")
+                else:
+                    st.error(f"API error: {response.status_code}")
         else:
             st.warning("Please upload an image file.")
-
-
-#wagon_cab_api_url = 'https://taxifare.lewagon.ai/predict'
-#response = requests.get(wagon_cab_api_url, params=params)
-
-#prediction = response.json()
-
-#pred = prediction['fare']
-
-#st.header(f'Fare amount: ${round(pred, 2)}')
