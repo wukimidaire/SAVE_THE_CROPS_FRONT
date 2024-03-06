@@ -9,6 +9,8 @@ from PIL import Image
 import base64
 
 
+
+
 '''
 # Save The Crops Front
 
@@ -16,43 +18,26 @@ This front queries the Save The Crops [save_the_crops API](https://taxifare.lewa
 '''
 
 
-def set_bg_image(img_path):
-    """
-    Sets the background image for the Streamlit app.
 
-    Args:
-        img_path (str): Path to the background image.
-    """
 
-    st.markdown(f'''
-    <style>
-      body {{
-        background-image: url("{img_path}");
-        background-size: cover;
-        background-position: center;
-      }}
-    </style>
-    ''', unsafe_allow_html=True)
+
 
 # set the base directory relative to the script's location
 base_dir = os.path.dirname(os.path.realpath(__file__))
 
-# construct the paths to the images using os.path.join for platform independence
+# construct the relative paths
 img_path = os.path.join(base_dir, "media", "Brown_wheat.jpg")
+
+
 placeholder_path = os.path.join(base_dir, "media", "leaf_area.webp")
 
-## Call the custom component
-set_bg_image(img_path)
+
 
 # adds a placeholder image to display initially
 placeholder = Image.open(placeholder_path)
 
 # displays initial placeholder image
 st.image(placeholder, use_column_width=True)
-
-
-# HARDCODED OLD WAY
-#img_path= "/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/Brown_wheat.jpg"
 
 
 
@@ -94,3 +79,64 @@ with st.form(key='params_for_api'):
                     st.error(f"API error: {response.status_code}")
         else:
             st.warning("Please upload an image file.")
+
+
+def set_bg_hack(main_bg):
+    '''
+    A function to unpack an image from root folder and set as bg.
+
+    Returns
+    -------
+    The background.
+    '''
+    # set bg name
+    main_bg_ext = "png"
+
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
+             background-size: cover
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
+
+set_bg_hack("/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/field.jpg")
+
+############# NOT WORKING ############
+## Call the custom component
+#def set_bg_image(img_path):
+#    """
+#    Sets the background image for the Streamlit app.
+#
+#    Args:
+#        img_path (str): Path to the background image.
+#    """
+#
+#    st.markdown(f'''
+#    <style>
+#      body {{
+#        background-image: url("{img_path}");
+#        background-size: cover;
+#        background-position: center;
+#      }}
+#    </style>
+#    ''', unsafe_allow_html=True)
+#set_bg_image(img_path)
+
+############# NOT WORKING II ############
+#page_bg_img = '''
+#<style>
+#body {
+#background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
+#background-size: cover;
+#  /* Add !important to override conflicting styles */
+#  background-image: important !important;
+#}
+#</style>
+#'''
+
+#st.markdown(page_bg_img, unsafe_allow_html=True)
