@@ -1,4 +1,5 @@
 import streamlit as st
+import os # needed for the file paths
 import pandas as pd
 from io import BytesIO
 import requests
@@ -6,6 +7,7 @@ import time # needed for adding a delay (optional)
 # Added for image handling
 from PIL import Image
 import base64
+
 
 '''
 # Save The Crops Front
@@ -32,17 +34,27 @@ def set_bg_image(img_path):
     </style>
     ''', unsafe_allow_html=True)
 
-# Set the background image path
-img_path= "/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/Brown_wheat.jpg"
+# set the base directory relative to the script's location
+base_dir = os.path.dirname(os.path.realpath(__file__))
+
+# construct the paths to the images using os.path.join for platform independence
+img_path = os.path.join(base_dir, "media", "Brown_wheat.jpg")
+placeholder_path = os.path.join(base_dir, "media", "leaf_area.webp")
 
 ## Call the custom component
 set_bg_image(img_path)
 
 # adds a placeholder image to display initially
-placeholder = Image.open("/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/leaf_area.webp")
+placeholder = Image.open(placeholder_path)
 
 # displays initial placeholder image
 st.image(placeholder, use_column_width=True)
+
+
+# HARDCODED OLD WAY
+#img_path= "/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/Brown_wheat.jpg"
+
+
 
 with st.form(key='params_for_api'):
 
@@ -73,7 +85,7 @@ with st.form(key='params_for_api'):
                         pred = prediction['crop species']  # Assuming the key is 'crop species'
                         st.header(f'Predicted crop species: {round(pred, 2)}')
 
-                        # displays uploaded image, its overwrites the placeholder
+                        # displays uploaded image, its overwrites the placeholder image
                         st.image(uploaded_file, use_column_width=True, key="uploaded_image")
 
                     except (KeyError, ValueError) as e:
