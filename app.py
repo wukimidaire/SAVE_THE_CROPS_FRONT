@@ -5,7 +5,7 @@ import requests
 import time # needed for adding a delay (optional)
 # Added for image handling
 from PIL import Image
-
+import base64
 
 '''
 # Save The Crops Front
@@ -13,6 +13,30 @@ from PIL import Image
 This front queries the Save The Crops [save_the_crops API](https://taxifare.lewagon.ai/predict?pickup_datetime=2012-10-06%2012:10:20&pickup_longitude=40.7614327&pickup_latitude=-73.9798156&dropoff_longitude=40.6513111&dropoff_latitude=-73.8803331&passenger_count=2)
 '''
 
+
+def set_bg_image(img_path):
+    """
+    Sets the background image for the Streamlit app.
+
+    Args:
+        img_path (str): Path to the background image.
+    """
+
+    st.markdown(f'''
+    <style>
+      body {{
+        background-image: url("{img_path}");
+        background-size: cover;
+        background-position: center;
+      }}
+    </style>
+    ''', unsafe_allow_html=True)
+
+# Set the background image path
+img_path= "/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/Brown_wheat.jpg"
+
+## Call the custom component
+set_bg_image(img_path)
 
 # adds a placeholder image to display initially
 placeholder = Image.open("/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/leaf_area.webp")
@@ -37,7 +61,7 @@ with st.form(key='params_for_api'):
             # Display loading spinner while waiting for API response
             with st.spinner("Predicting crop species..."):
                 # Introduce a 10-second delay
-                time.sleep(10) # optional, only want to use this for testing with the backend api
+                time.sleep(5) # optional, only want to use this for testing with the backend api
 
                 # sends the request and process the response
                 response = requests.post(save_the_crops_url, files=files)
