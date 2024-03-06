@@ -18,15 +18,11 @@ This front queries the Save The Crops [save_the_crops API](https://taxifare.lewa
 '''
 
 
-
-
-
-
 # set the base directory relative to the script's location
 base_dir = os.path.dirname(os.path.realpath(__file__))
 
 # construct the relative paths
-img_path = os.path.join(base_dir, "media", "Brown_wheat.jpg")
+img_path = os.path.join(base_dir, "media", "field.jpg")
 
 
 placeholder_path = os.path.join(base_dir, "media", "leaf_area.webp")
@@ -40,6 +36,31 @@ placeholder = Image.open(placeholder_path)
 st.image(placeholder, use_column_width=True)
 
 
+def set_bg_image(main_bg):
+    '''
+    A function to unpack an image from root folder and set as bg.
+
+    Returns
+    -------
+    The background.
+    '''
+    # set bg name
+    main_bg_ext = "png"
+
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
+             background-size: cover
+         }}
+
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
+
+set_bg_image(img_path)
 
 with st.form(key='params_for_api'):
 
@@ -81,62 +102,50 @@ with st.form(key='params_for_api'):
             st.warning("Please upload an image file.")
 
 
-def set_bg_hack(main_bg):
-    '''
-    A function to unpack an image from root folder and set as bg.
 
-    Returns
-    -------
-    The background.
-    '''
-    # set bg name
-    main_bg_ext = "png"
+def set_bg_black():
+   '''
+   A function to create a black element behind the text.
 
-    st.markdown(
-         f"""
-         <style>
-         .stApp {{
-             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
-             background-size: cover
-         }}
-         </style>
-         """,
-         unsafe_allow_html=True
-     )
+   Returns
+   -------
+   None
+   '''
+   black_element_width = "1000px"  # Adjust this based on your needs
+   black_element_height = "900px"  # Adjust this based on your needs
+   black_element_top = "-900px"  # Adjust this to position the element
+   black_element_left = "0"  # Left position
 
-set_bg_hack("/Users/victordecoster/code/MahautHDL/save_the_crops_front/media/field.jpg")
+   st.markdown(
+       f"""
+       <style>
+       .black-element {{
+           position: absolute;
+           top: {black_element_top};
+           left: 50%;
+           transform: translateX(-50%);
+           width: {black_element_width};
+           height: {black_element_height};
+           background-color: black;
+           opacity: 0.7;  # Adjust opacity as needed
+           z-index: 0;  # Set lower z-index
+       }}
 
-############# NOT WORKING ############
-## Call the custom component
-#def set_bg_image(img_path):
-#    """
-#    Sets the background image for the Streamlit app.
-#
-#    Args:
-#        img_path (str): Path to the background image.
-#    """
-#
-#    st.markdown(f'''
-#    <style>
-#      body {{
-#        background-image: url("{img_path}");
-#        background-size: cover;
-#        background-position: center;
-#      }}
-#    </style>
-#    ''', unsafe_allow_html=True)
-#set_bg_image(img_path)
+       .text-on-black {{
+         color: white;  # Set text color to white
+         padding: 10px;  # Add padding
+       }}
 
-############# NOT WORKING II ############
-#page_bg_img = '''
-#<style>
-#body {
-#background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
-#background-size: cover;
-#  /* Add !important to override conflicting styles */
-#  background-image: important !important;
-#}
-#</style>
-#'''
+       </style>
+       """,
+       unsafe_allow_html=True
+   )
 
-#st.markdown(page_bg_img, unsafe_allow_html=True)
+   # Add a class to the text element to position it in front of the black element
+   st.markdown(
+       "<div class='black-element'></div>",
+       unsafe_allow_html=True
+   )
+
+# Call the function to create the black element
+set_bg_black()
