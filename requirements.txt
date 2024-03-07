@@ -3,12 +3,14 @@
 # If you think of adding scikit-learn or tensorflow here, think again!
 # This is the front-end. Heavy calculations go in the back-end, no?
 
-# Sreamlit and extensions
+# Streamlit and extensions
 streamlit
 requests
-PIL
+PIL # Used for image loading
 io
 pandas
+os
+
 
 
 # If you want to display datasets, or if your API returns you dataframes,
