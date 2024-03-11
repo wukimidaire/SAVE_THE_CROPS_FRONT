@@ -10,76 +10,45 @@ import base64
 
 
 
-# construct the relative paths
+# construct the relative path of the backgroun image
 base_dir = os.path.dirname(os.path.realpath(__file__))
 img_path = os.path.join(base_dir, "media", "field.jpg")
-#placeholder_path = os.path.join(base_dir, "media", "leaf_area.webp")
-#placeholder = Image.open(placeholder_path)
-# displays initial placeholder image
-#st.image(placeholder, use_column_width=True)
 
 
+def set_bg_image(main_bg):
+    '''
+    A function to unpack an image from root folder and set as bg.
+
+    Returns
+    -------
+    The background.
+    '''
+    # set bg name
+    main_bg_ext = "png"
+
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
+             background-size: cover
+         }}
+
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
+set_bg_image(img_path)
+
+
+
+# Replace with your chatbot's webhook URL
+WEBHOOK_URL = "https://vliegendepater.app.n8n.cloud/webhook/bc011292-0fb8-4913-92c0-fe4fc02aae8d/chat"
 
 
 
 # create a container for the text, buttons and black background
 container = st.container()
-def set_bg_black():
-    """
-    A function to create a black element behind the text and buttons within the container.
-
-    Returns:
-        None
-    """
-
-    black_element_width = "1000px"  # Adjust this based on your needs
-    black_element_height = "900px"  # Adjust this based on your needs
-    black_element_top = "-900px"  # Adjust this to position the element
-
-    # Define CSS styles for the black element
-    black_element_styles = f"""
-    <style>
-        .black-element {{
-            position: absolute;
-            top: {black_element_top};
-            left: 50%;
-            transform: translateX(-50%);
-            width: {black_element_width};
-            height: {black_element_height};
-            background-color: black;
-            opacity: 0.7;  # Adjust opacity as needed
-            z-index: -1;  # Set lower z-index
-        }}
-    </style>
-    """
-
-    # Define CSS styles for text on black element (optional)
-    text_on_black_styles = f"""
-    <style>
-        .text-on-black {{
-            color: white;  # Set text color to white
-            padding: 10px;  # Add padding
-        }}
-    </style>
-    """
-
-    # Create the black element within the container (assuming container is already defined)
-    with container:
-        # Apply black element styles
-        st.markdown(black_element_styles, unsafe_allow_html=True)
-
-        # Apply text on black styles (optional)
-        # st.markdown(text_on_black_styles, unsafe_allow_html=True)
-
-        # Create the actual black element using the class 'black-element'
-        st.markdown("<div class='black-element'></div>", unsafe_allow_html=True)
-# Call the function to create the black element
-#set_bg_black()
-
-
-
-
-
 with container:
 
     '''
@@ -88,6 +57,23 @@ with container:
     This front queries the Save The Crops [save_the_crops API](https://taxifare.lewagon.ai/predict?pickup_datetime=2012-10-06%2012:10:20&pickup_longitude=40.7614327&pickup_latitude=-73.9798156&dropoff_longitude=40.6513111&dropoff_latitude=-73.8803331&passenger_count=2)
     '''
     with st.form(key='params_for_api'):
+
+
+        # test_url = https://vliegendepater.app.n8n.cloud/webhook-test/7e052c57-cbea-48f7-8d20-4db249e032c6
+        def send_message(message):
+            """Sends a message to the chatbot backend."""
+            response = requests.post(WEBHOOK_URL, json={"message": message})
+            return response.json()
+
+
+
+        # Chatbot section
+        user_input = st.text_input("Ask a question to the chatbot:", "")
+        submit_button = st.form_submit_button(label="Send to Chatbot")
+
+        if user_input:
+            response = send_message(user_input)
+            st.write("Chatbot:", response["message"])
 
         # Upload image file
         uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
