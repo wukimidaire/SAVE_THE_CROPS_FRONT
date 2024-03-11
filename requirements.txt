@@ -10,8 +10,8 @@ PIL # Used for image loading
 io
 pandas
 os
-
-
+streamlit-chat
+requests-toolbelt
 
 # If you want to display datasets, or if your API returns you dataframes,
 # you might need to add some extra stuff hereunder, e.g. pandas
