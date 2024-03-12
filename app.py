@@ -58,6 +58,7 @@ def send_image_to_api(image_data, api_url="https://quirkynightingale-ivqufm4oza-
 
         response = requests.post(api_url, headers=headers, data=multipart_data)
         response.raise_for_status()  # Raise an exception for non-2xx status codes
+
         return response.json()
     except requests.exceptions.RequestException as e:
         st.error(f"An error occurred while sending the image: {e}")
@@ -71,7 +72,7 @@ with container:
     '''
     # Save The Crops Front
 
-    This front queries the Save The Crops [save_the_crops API](https://taxifare.lewagon.ai/predict?pickup_datetime=2012-10-06%2012:10:20&pickup_longitude=40.7614327&pickup_latitude=-73.9798156&dropoff_longitude=40.6513111&dropoff_latitude=-73.8803331&passenger_count=2)
+    This front queries the Save The Crops [save_the_crops API])
     '''
     # Wrap the user input and submit button within a form
     #with st.form(key="chatbot_form"):  # Give the form a unique key
@@ -92,7 +93,8 @@ with container:
         try:
             response = send_image_to_api(uploaded_image)  # Pass the full uploaded_image object
             if response:
-                st.write(f"API Response: {response}")
+                st.write(f"Plant : {response['plant']}")
+                st.write(f"Disease : {response['disease']}")
                 st.image(uploaded_image, width=400)  # Display the uploaded image
         except requests.exceptions.RequestException as e:
             st.error(f"An error occurred: {e}")
