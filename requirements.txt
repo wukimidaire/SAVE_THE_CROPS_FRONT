@@ -6,10 +6,7 @@
 # Streamlit and extensions
 streamlit
 requests
-PIL # Used for image loading
-io
 pandas
-os
 streamlit-chat
 requests-toolbelt
 

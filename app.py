@@ -1,11 +1,8 @@
 import streamlit as st
 import os # needed for the file paths
 import pandas as pd
-from io import BytesIO
 import requests
 import time # needed for adding a delay (optional)
-# Added for image handling
-from PIL import Image
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
@@ -77,14 +74,14 @@ with container:
     This front queries the Save The Crops [save_the_crops API](https://taxifare.lewagon.ai/predict?pickup_datetime=2012-10-06%2012:10:20&pickup_longitude=40.7614327&pickup_latitude=-73.9798156&dropoff_longitude=40.6513111&dropoff_latitude=-73.8803331&passenger_count=2)
     '''
     # Wrap the user input and submit button within a form
-    with st.form(key="chatbot_form"):  # Give the form a unique key
-        user_input = st.text_input("Ask a question to the chatbot:", "")
-        submit_button = st.form_submit_button(label="Send to Chatbot")
+    #with st.form(key="chatbot_form"):  # Give the form a unique key
+    #    user_input = st.text_input("Ask a question to the chatbot:", "")
+    #    submit_button = st.form_submit_button(label="Send to Chatbot")
 
-    if user_input:
-        if submit_button:  # Check if the submit button was pressed
-            response = send_message(user_input)
-            st.write("Chatbot:", response["message"])
+    #if user_input:
+    #    if submit_button:  # Check if the submit button was pressed
+     #       response = send_message(user_input)
+     #       st.write("Chatbot:", response["message"])
 
 
     # Streamlit App
