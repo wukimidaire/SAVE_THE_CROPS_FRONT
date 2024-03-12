@@ -12,6 +12,10 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 # construct the relative path of the backgroun image
 base_dir = os.path.dirname(os.path.realpath(__file__))
 img_path = os.path.join(base_dir, "media", "field.jpg")
+#api_url = os.path.join(base_dir, ".streamlit", "secrets.toml", "API_URL" )
+#webhook_url = os.path.join(base_dir, ".streamlit", "secrets.toml", "WEBHOOK_URL")
+api_url = os.environ["API_URL"]
+webhook_url = st.secrets["WEBHOOK_URL"]
 
 
 def set_bg_image(main_bg):
@@ -40,17 +44,12 @@ def set_bg_image(main_bg):
 set_bg_image(img_path)
 
 
-
-# Replace with your chatbot's webhook URL
-WEBHOOK_URL = "https://vliegendepater.app.n8n.cloud/webhook/bc011292-0fb8-4913-92c0-fe4fc02aae8d/chat"
-
-# test_url = https://vliegendepater.app.n8n.cloud/webhook-test/7e052c57-cbea-48f7-8d20-4db249e032c6
 def send_message(message):
     """Sends a message to the chatbot backend."""
-    response = requests.post(WEBHOOK_URL, json={"message": message})
+    response = requests.post(webhook_url, json={"message": message})
     return response.json()
 
-def send_image_to_api(image_data, api_url="https://quirkynightingale-ivqufm4oza-ew.a.run.app/upload"):
+def send_image_to_api(image_data, api_url=api_url):
     try:
         multipart_data = MultipartEncoder(
         fields={"file": (image_data.name, image_data, "image/jpeg")})
