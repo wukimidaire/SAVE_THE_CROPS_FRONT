@@ -5,6 +5,7 @@
 
 # Streamlit and extensions
 streamlit
+streamlit_extras
 requests
 pandas
 streamlit-chat

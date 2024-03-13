@@ -61,31 +61,20 @@ def send_image_to_api(image_data, api_url=api_url):
         return None
 
 
-# create a container for the text, buttons and black background
-container = st.container()
-#container_color = "#f0f0f0"
+
+css_body_container = f'''
+<style>
+    section [data-testid="stAppViewBlockContainer"] {{background-color:rgba(0, 66, 37, 0.6)}}
+
+</style>
+'''
+st.markdown(css_body_container,unsafe_allow_html=True)
+
+
+# Create the container
+container = st.container(height=1000)
 
 with container:
-
-    #(style=f"""
-    #background-color: {container_color};
-    #padding: 10px;  /* Optional padding for content */
-    #border-radius: 5px;  /* Optional rounded corners */
-    #"""):
-
-
-    #''' # Save The Crops Front This front queries the Save The Crops [save_the_crops API])'''
-    # Wrap the user input and submit button within a form
-    #with st.form(key="chatbot_form"):  # Give the form a unique key
-    #    user_input = st.text_input("Ask a question to the chatbot:", "")
-    #    submit_button = st.form_submit_button(label="Send to Chatbot")
-
-    #if user_input:
-    #    if submit_button:  # Check if the submit button was pressed
-     #       response = send_message(user_input)
-     #       st.write("Chatbot:", response["message"])
-
-
     # Streamlit App
     st.title("Image Upload App")
     options = st.multiselect(
@@ -103,8 +92,24 @@ with container:
         try:
             response = send_image_to_api(uploaded_image, api_url_with_specie)
             if response:
-                st.write(f"Plant : {response['plant']}")
                 st.write(f"Disease : {response['disease']}")
                 st.image(uploaded_image, width=400)
         except requests.exceptions.RequestException as e:
             st.error(f"An error occurred: {e}")
+    #(style=f"""
+    #background-color: {container_color};
+    #padding: 10px;  /* Optional padding for content */
+    #border-radius: 5px;  /* Optional rounded corners */
+    #"""):
+
+
+    #''' # Save The Crops Front This front queries the Save The Crops [save_the_crops API])'''
+    # Wrap the user input and submit button within a form
+    #with st.form(key="chatbot_form"):  # Give the form a unique key
+    #    user_input = st.text_input("Ask a question to the chatbot:", "")
+    #    submit_button = st.form_submit_button(label="Send to Chatbot")
+
+    #if user_input:
+    #    if submit_button:  # Check if the submit button was pressed
+     #       response = send_message(user_input)
+     #       st.write("Chatbot:", response["message"])
