@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_extras.stylable_container import stylable_container
 import os # needed for the file paths
 import pandas as pd
 import requests
