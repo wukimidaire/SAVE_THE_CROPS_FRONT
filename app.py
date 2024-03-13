@@ -1,11 +1,12 @@
 import streamlit as st
-from streamlit_extras.stylable_container import stylable_container
+
 import os # needed for the file paths
 import pandas as pd
 import requests
 import time # needed for adding a delay (optional)
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
+import json
 
 st.set_page_config(page_title = "Save The Crops", page_icon="✨", layout = "centered", initial_sidebar_state = "expanded")
 
@@ -51,7 +52,11 @@ def send_message(message):
 def send_image_to_api(image_data, api_url=api_url):
     try:
         multipart_data = MultipartEncoder(
-        fields={"file": (image_data.name, image_data, "image/jpeg")})
+            fields={
+                "file": (image_data.name, image_data, "image/jpeg"),
+                "plant": "all"
+            }
+        )
         headers = {"Content-Type": multipart_data.content_type}
 
         response = requests.post(api_url, headers=headers, data=multipart_data)
@@ -86,20 +91,22 @@ with container:
     ['tomato', 'maize', 'cassava', 'cashew', 'all'], max_selections=1)
     uploaded_image = st.file_uploader("Choose an Image", type=["jpg", "jpeg", "png"])
 
+
+
     if uploaded_image is not None:
         if not options:  # Check if a specie has been selected
             st.error("Select a specie before we can help you out")
         else:
             selected_specie = options[0]  # Get the selected specie
-            api_url_with_specie = f"{api_url}?plant={selected_specie}"
 
-        try:
-            response = send_image_to_api(uploaded_image, api_url_with_specie)
+        if True:
+        # try:
+            response = send_image_to_api(uploaded_image, api_url)
             if response:
                 st.write(f"Disease : {response['disease']}")
                 st.image(uploaded_image, width=400)
-        except requests.exceptions.RequestException as e:
-            st.error(f"An error occurred: {e}")
+        # except requests.exceptions.RequestException as e:
+        #     st.error(f"An error occurred: {e}")
 
 
 
