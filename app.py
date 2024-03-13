@@ -7,6 +7,8 @@ import time # needed for adding a delay (optional)
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
+st.set_page_config(page_title = "Save The Crops", page_icon="✨", layout = "centered", initial_sidebar_state = "expanded")
+
 
 # construct the relative path of the backgroun image
 base_dir = os.path.dirname(os.path.realpath(__file__))
@@ -75,10 +77,21 @@ st.markdown(css_body_container,unsafe_allow_html=True)
 container = st.container(height=1000)
 
 with container:
+    '''
+    # Save The Crops Application
+    '''
+
     # Streamlit App
-    st.title("Image Upload App")
+    st.subheader("Image processing application for fast and early disease detection")
+    #st.header(':green[This is a white header]')
+    '''
+
+
+
+    '''
+
     options = st.multiselect(
-    'What plant specie are you uploading?',
+    'What plant are you uploading?',
     ['Tomato', 'Maize', 'Cassava', 'Cashew'], max_selections=1)
     uploaded_image = st.file_uploader("Choose an Image", type=["jpg", "jpeg", "png"])
 
@@ -87,7 +100,7 @@ with container:
             st.error("Select a specie before we can help you out")
         else:
             selected_specie = options[0]  # Get the selected specie
-            api_url_with_specie = f"{api_url}?specie={selected_specie}"
+            api_url_with_specie = f"{api_url}?plant={selected_specie}"
 
         try:
             response = send_image_to_api(uploaded_image, api_url_with_specie)
@@ -96,14 +109,10 @@ with container:
                 st.image(uploaded_image, width=400)
         except requests.exceptions.RequestException as e:
             st.error(f"An error occurred: {e}")
-    #(style=f"""
-    #background-color: {container_color};
-    #padding: 10px;  /* Optional padding for content */
-    #border-radius: 5px;  /* Optional rounded corners */
-    #"""):
 
 
-    #''' # Save The Crops Front This front queries the Save The Crops [save_the_crops API])'''
+
+
     # Wrap the user input and submit button within a form
     #with st.form(key="chatbot_form"):  # Give the form a unique key
     #    user_input = st.text_input("Ask a question to the chatbot:", "")
