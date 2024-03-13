@@ -2,10 +2,9 @@ import streamlit as st
 import os # needed for the file paths
 import pandas as pd
 import requests
-import time # needed for adding a delay (optional)
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-import json
+
 
 st.set_page_config(page_title = "Save The Crops", page_icon="✨", layout = "centered", initial_sidebar_state = "expanded")
 
@@ -53,7 +52,7 @@ def send_image_to_api(image_data, api_url=api_url):
         multipart_data = MultipartEncoder(
             fields={
                 "file": (image_data.name, image_data, "image/jpeg"),
-                "plant": options
+                "plant": options[0]
             }
         )
         headers = {"Content-Type": multipart_data.content_type}
@@ -102,7 +101,7 @@ with container:
         # try:
             response = send_image_to_api(uploaded_image, api_url)
             if response:
-                st.write(f"Disease : {response['disease']}")
+                st.subheader(f"{(response['disease'].capitalize())}")
                 st.image(uploaded_image, width=400)
         # except requests.exceptions.RequestException as e:
         #     st.error(f"An error occurred: {e}")
