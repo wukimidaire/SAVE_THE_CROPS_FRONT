@@ -53,7 +53,7 @@ def send_image_to_api(image_data, api_url=api_url):
         multipart_data = MultipartEncoder(
             fields={
                 "file": (image_data.name, image_data, "image/jpeg"),
-                "plant": "all"
+                "plant": options
             }
         )
         headers = {"Content-Type": multipart_data.content_type}
