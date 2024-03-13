@@ -63,7 +63,7 @@ def send_image_to_api(image_data, api_url=api_url):
         return None
 
 
-
+# This is providing a shaded background so there is more contrast on the buttons and text fields
 css_body_container = f'''
 <style>
     section [data-testid="stAppViewBlockContainer"] {{background-color:rgba(0, 66, 37, 0.6)}}
@@ -78,21 +78,12 @@ container = st.container(height=1000)
 
 with container:
     '''
-    # Save The Crops Application
-    '''
-
-    # Streamlit App
-    st.subheader("Image processing application for fast and early disease detection")
-    #st.header(':green[This is a white header]')
-    '''
-
-
-
+    # Save The Crops
     '''
 
     options = st.multiselect(
     'What plant are you uploading?',
-    ['Tomato', 'Maize', 'Cassava', 'Cashew'], max_selections=1)
+    ['tomato', 'maize', 'cassava', 'cashew', 'all'], max_selections=1)
     uploaded_image = st.file_uploader("Choose an Image", type=["jpg", "jpeg", "png"])
 
     if uploaded_image is not None:
