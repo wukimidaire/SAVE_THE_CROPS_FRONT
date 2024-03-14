@@ -14,7 +14,6 @@ base_dir = os.path.dirname(os.path.realpath(__file__))
 img_path = os.path.join(base_dir, "media", "field.jpg")
 # Secrets variables
 api_url = os.environ["API_URL"]
-webhook_url = st.secrets["WEBHOOK_URL"]
 
 
 def set_bg_image(main_bg):
@@ -41,11 +40,6 @@ def set_bg_image(main_bg):
          unsafe_allow_html=True
      )
 set_bg_image(img_path)
-
-def send_message(message):
-    """Sends a message to the chatbot backend."""
-    response = requests.post(webhook_url, json={"message": message})
-    return response.json()
 
 def send_image_to_api(image_data, api_url=api_url):
     try:
@@ -105,16 +99,3 @@ with container:
                 st.image(uploaded_image, width=400)
         # except requests.exceptions.RequestException as e:
         #     st.error(f"An error occurred: {e}")
-
-
-
-
-    # Wrap the user input and submit button within a form
-    #with st.form(key="chatbot_form"):  # Give the form a unique key
-    #    user_input = st.text_input("Ask a question to the chatbot:", "")
-    #    submit_button = st.form_submit_button(label="Send to Chatbot")
-
-    #if user_input:
-    #    if submit_button:  # Check if the submit button was pressed
-     #       response = send_message(user_input)
-     #       st.write("Chatbot:", response["message"])
