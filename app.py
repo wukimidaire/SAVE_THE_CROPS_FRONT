@@ -79,7 +79,7 @@ def api_calling(prompt):
 # This is providing a shaded background so there is more contrast on the buttons and text fields
 css_body_container = f'''
 <style>
-    section [data-testid="stAppViewBlockContainer"] {{background-color:rgba(0, 66, 37, 0.6)}}
+    section [data-testid="stAppViewBlockContainer"] {{background-color:rgba(0, 66, 37, 0.6); padding: 0}}
 </style>
 '''
 
@@ -120,7 +120,8 @@ with container:
                     else:
                         message = f"Disease : {response['disease']}"
                         #st.subheader(f"{(response['disease'].capitalize())}")
-                    st.subheader(message)
+
+                    st.markdown(f'<p style="text-align: center; font-size: 24px;">{message.capitalize()}</p>', unsafe_allow_html=True)
                     st.image(uploaded_image, width=400)
 
     with col3:
