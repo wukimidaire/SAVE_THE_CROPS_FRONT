@@ -5,17 +5,15 @@ import pandas as pd
 import requests
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-
 import openai
 
-st.set_page_config(page_title = "Save The Crops", 
-                   page_icon="🌱", 
-                   layout = "centered", 
+st.set_page_config(page_title = "Save The Crops",
+                   page_icon="🌱",
+                   layout = "centered",
                    initial_sidebar_state = "expanded")
 
 # Secrets variables
 api_url = os.environ["API_URL"]
-webhook_url = st.secrets["WEBHOOK_URL"]
 openai.api_key = st.secrets["API_OPENAI"]
 
 
@@ -128,24 +126,3 @@ with container:
 
     with col3:
         st.write(' ')
-    
-    st.title("ChatGPT ChatBot With Streamlit and OpenAI")
-    if 'user_input' not in st.session_state:
-        st.session_state['user_input'] = []
-
-    if 'openai_response' not in st.session_state:
-        st.session_state['openai_response'] = []
-
-    def get_text():
-        input_text = st.text_input("write here", key="input")
-        return input_text
-
-    user_input = get_text()
-
-    if user_input:
-        output = api_calling(user_input)
-        output = output.lstrip("\n")
-
-        # Store the output
-        st.session_state.openai_response.append(user_input)
-        st.session_state.user_input.append(output)
