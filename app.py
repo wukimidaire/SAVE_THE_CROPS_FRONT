@@ -5,7 +5,6 @@ import pandas as pd
 import requests
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-
 import openai
 
 st.set_page_config(page_title = "Save The Crops",
@@ -15,7 +14,6 @@ st.set_page_config(page_title = "Save The Crops",
 
 # Secrets variables
 api_url = os.environ["API_URL"]
-# webhook_url = st.secrets["WEBHOOK_URL"]
 openai.api_key = st.secrets["API_OPENAI"]
 
 
