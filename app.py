@@ -89,12 +89,12 @@ st.markdown(css_body_container,unsafe_allow_html=True)
 container = st.container(height=1000)
 
 with container:
-    st.markdown("<h1 style='text-align: center; font-size: 96px;'>Save the Crops.</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 96px; font-family: Playfair Display;'>Save the Crops.</h1>", unsafe_allow_html=True)
 
     st.markdown('<p style="text-align: center; font-size: 32px;">What plant are you uploading?</p>', unsafe_allow_html=True)
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;font-size: 24px;}</style>', unsafe_allow_html=True)
-    options = st.radio(' ', ('all', 'cashew', 'cassava', 'maize', 'tomato'))
+    options = st.radio(' ', ('Cashew', 'Cassava', 'Maize', 'Tomato'))
 
     st.markdown('<p style="text-align: center; font-size: 32px;">Choose an image</p>', unsafe_allow_html=True)
 
@@ -105,7 +105,7 @@ with container:
         if not options:  # Check if a specie has been selected
             st.error("Select a species before we can help you out")
         else:
-            selected_species = options  # Get the selected species
+            selected_species = options.lower()  # Get the selected species
         if True:  # replace with the actual condition to check response
             response = send_image_to_api(uploaded_image, api_url)
             if response:
