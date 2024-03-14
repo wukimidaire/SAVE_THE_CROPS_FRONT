@@ -86,28 +86,27 @@ with container:
 
     uploaded_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
 
-
     col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
 
     with col1:
         st.write(' ')
 
     with col2:
-
         if uploaded_image is not None:
             if not options:  # Check if a specie has been selected
-                st.error("Select a specie before we can help you out")
+                st.error("Select a species before we can help you out")
             else:
-                selected_specie = options[0]  # Get the selected specie
-
-            if True:
-            # try:
+                selected_species = options[0]  # Get the selected species
+            if True:  # replace with the actual condition to check response
                 response = send_image_to_api(uploaded_image, api_url)
                 if response:
-                    st.subheader(f"{(response['disease'].capitalize())}")
+                    if response["disease"] == "healthy":
+                        message = "Grab a beer, your plants are fine!"
+                    else:
+                        message = f"Disease : {response['disease']}"
+                        #st.subheader(f"{(response['disease'].capitalize())}")
+                    st.subheader(message)
                     st.image(uploaded_image, width=400)
-            # except requests.exceptions.RequestException as e:
-            #     st.error(f"An error occurred: {e}")
 
     with col3:
         st.write(' ')
