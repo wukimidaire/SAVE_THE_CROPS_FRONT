@@ -101,28 +101,32 @@ with container:
 
     uploaded_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
 
-    col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
 
-    with col1:
-        st.write(' ')
+    if uploaded_image is not None:
+        if not options:  # Check if a specie has been selected
+            st.error("Select a species before we can help you out")
+        else:
+            selected_species = options[0]  # Get the selected species
+        if True:  # replace with the actual condition to check response
+            response = send_image_to_api(uploaded_image, api_url)
+            if response:
+                if response["disease"] == "healthy":
+                    text_color = "#A6DDA8"
+                    message = "Grab a beer, your plants are fine!"
+                else:
+                    text_color = "#FF876B"
+                    message = f"Disease : {response['disease']}"
+                    #st.subheader(f"{(response['disease'].capitalize())}")
 
-    with col2:
-        if uploaded_image is not None:
-            if not options:  # Check if a specie has been selected
-                st.error("Select a species before we can help you out")
-            else:
-                selected_species = options[0]  # Get the selected species
-            if True:  # replace with the actual condition to check response
-                response = send_image_to_api(uploaded_image, api_url)
-                if response:
-                    if response["disease"] == "healthy":
-                        message = "Grab a beer, your plants are fine!"
-                    else:
-                        message = f"Disease : {response['disease']}"
-                        #st.subheader(f"{(response['disease'].capitalize())}")
+                st.markdown(f'<p style="text-align: center; color: {text_color}; font-size: 32px;">{message.capitalize()}</p>', unsafe_allow_html=True)
 
-                    st.markdown(f'<p style="text-align: center; font-size: 24px;">{message.capitalize()}</p>', unsafe_allow_html=True)
+                col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
+
+                with col1:
+                    st.write(' ')
+
+                with col2:
                     st.image(uploaded_image, width=400)
 
-    with col3:
-        st.write(' ')
+                with col3:
+                    st.write(' ')
