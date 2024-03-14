@@ -10,6 +10,7 @@ requests
 pandas
 streamlit-chat
 requests-toolbelt
+openai
 
 # If you want to display datasets, or if your API returns you dataframes,
 # you might need to add some extra stuff hereunder, e.g. pandas
