@@ -51,7 +51,7 @@ def send_image_to_api(image_data, api_url=api_url):
         multipart_data = MultipartEncoder(
             fields={
                 "file": (image_data.name, image_data, "image/jpeg"),
-                "plant": options[0]
+                "plant": selected_species
             }
         )
         headers = {"Content-Type": multipart_data.content_type}
@@ -93,9 +93,8 @@ with container:
 
     st.markdown('<p style="text-align: center; font-size: 32px;">What plant are you uploading?</p>', unsafe_allow_html=True)
 
-    options = st.multiselect(
-    '',
-    ['tomato', 'maize', 'cassava', 'cashew', 'all'], max_selections=1)
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;font-size: 24px;}</style>', unsafe_allow_html=True)
+    options = st.radio(' ', ('all', 'cashew', 'cassava', 'maize', 'tomato'))
 
     st.markdown('<p style="text-align: center; font-size: 32px;">Choose an image</p>', unsafe_allow_html=True)
 
@@ -106,7 +105,7 @@ with container:
         if not options:  # Check if a specie has been selected
             st.error("Select a species before we can help you out")
         else:
-            selected_species = options[0]  # Get the selected species
+            selected_species = options  # Get the selected species
         if True:  # replace with the actual condition to check response
             response = send_image_to_api(uploaded_image, api_url)
             if response:
