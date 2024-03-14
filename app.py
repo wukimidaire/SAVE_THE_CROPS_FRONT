@@ -1,20 +1,27 @@
 import streamlit as st
+from streamlit_chat import message
 import os # needed for the file paths
 import pandas as pd
 import requests
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
+import openai
 
-st.set_page_config(page_title = "Save The Crops", page_icon="🌱", layout = "centered", initial_sidebar_state = "expanded")
+st.set_page_config(page_title = "Save The Crops", 
+                   page_icon="🌱", 
+                   layout = "centered", 
+                   initial_sidebar_state = "expanded")
+
+# Secrets variables
+api_url = os.environ["API_URL"]
+webhook_url = st.secrets["WEBHOOK_URL"]
+openai.api_key = st.secrets["API_OPENAI"]
 
 
 # construct the relative path of the backgroun image
 base_dir = os.path.dirname(os.path.realpath(__file__))
 img_path = os.path.join(base_dir, "media", "field.jpg")
-# Secrets variables
-api_url = os.environ["API_URL"]
-
 
 def set_bg_image(main_bg):
     '''
@@ -59,21 +66,31 @@ def send_image_to_api(image_data, api_url=api_url):
         st.error(f"An error occurred while sending the image: {e}")
         return None
 
+def api_calling(prompt):
+    completions = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    message = completions.choices[0].text
+    return message
 
 # This is providing a shaded background so there is more contrast on the buttons and text fields
 css_body_container = f'''
 <style>
     section [data-testid="stAppViewBlockContainer"] {{background-color:rgba(0, 66, 37, 0.6)}}
-
 </style>
 '''
+
 st.markdown(css_body_container,unsafe_allow_html=True)
 
 # Create the container
 container = st.container(height=1000)
 
 with container:
-
     st.markdown("<h1 style='text-align: center; font-size: 96px;'>Save the Crops.</h1>", unsafe_allow_html=True)
 
     st.markdown('<p style="text-align: center; font-size: 32px;">What plant are you uploading?</p>', unsafe_allow_html=True)
@@ -110,3 +127,24 @@ with container:
 
     with col3:
         st.write(' ')
+    
+    st.title("ChatGPT ChatBot With Streamlit and OpenAI")
+    if 'user_input' not in st.session_state:
+        st.session_state['user_input'] = []
+
+    if 'openai_response' not in st.session_state:
+        st.session_state['openai_response'] = []
+
+    def get_text():
+        input_text = st.text_input("write here", key="input")
+        return input_text
+
+    user_input = get_text()
+
+    if user_input:
+        output = api_calling(user_input)
+        output = output.lstrip("\n")
+
+        # Store the output
+        st.session_state.openai_response.append(user_input)
+        st.session_state.user_input.append(output)
