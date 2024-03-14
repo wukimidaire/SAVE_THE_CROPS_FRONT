@@ -3,20 +3,15 @@ from streamlit_chat import message
 import os # needed for the file paths
 import pandas as pd
 import requests
-import time # needed for adding a delay (optional)
 import base64
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 import openai
 
-
-
-st.set_page_config(
-    page_title = "Save The Crops",
-    page_icon="✨",
-    layout = "centered",
-    initial_sidebar_state = "expanded")
-
+st.set_page_config(page_title = "Save The Crops", 
+                   page_icon="🌱", 
+                   layout = "centered", 
+                   initial_sidebar_state = "expanded")
 
 # Secrets variables
 api_url = os.environ["API_URL"]
@@ -27,7 +22,6 @@ openai.api_key = st.secrets["API_OPENAI"]
 # construct the relative path of the backgroun image
 base_dir = os.path.dirname(os.path.realpath(__file__))
 img_path = os.path.join(base_dir, "media", "field.jpg")
-
 
 def set_bg_image(main_bg):
     '''
@@ -53,7 +47,6 @@ def set_bg_image(main_bg):
          unsafe_allow_html=True
      )
 set_bg_image(img_path)
-
 
 def send_image_to_api(image_data, api_url=api_url):
     try:
@@ -94,39 +87,48 @@ css_body_container = f'''
 
 st.markdown(css_body_container,unsafe_allow_html=True)
 
-
 # Create the container
 container = st.container(height=1000)
 
 with container:
+    st.markdown("<h1 style='text-align: center; font-size: 96px;'>Save the Crops.</h1>", unsafe_allow_html=True)
 
-    st.markdown("<h1 style='text-align: center; '>Save The Crops</h1>", unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 32px;">What plant are you uploading?</p>', unsafe_allow_html=True)
 
     options = st.multiselect(
-        "What plant are you uploading?",
-        ["tomato", "maize", "cassava", "cashew", "all"],
-        max_selections=1
-        )
-    uploaded_image = st.file_uploader("Choose an Image", type=["jpg", "jpeg", "png"])
+    '',
+    ['tomato', 'maize', 'cassava', 'cashew', 'all'], max_selections=1)
 
-    if uploaded_image is not None:
-        if not options:  # Check if a specie has been selected
-            st.error("Select a specie before we can help you out")
-        else:
-            selected_specie = options[0]  # Get the selected specie
+    st.markdown('<p style="text-align: center; font-size: 32px;">Choose an image</p>', unsafe_allow_html=True)
 
-        if True:  # replace with the actual condition to check response
-            response = send_image_to_api(uploaded_image, api_url)
-            if response:
-                if response["disease"] == "healthy":
-                    message = "Grab a beer, your plants are fine!"
+    uploaded_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
 
-                else:
-                    message = f"Disease : {response['disease']}"
-                    #st.subheader(f"{(response['disease'].capitalize())}")
-                st.subheader(message)
-                st.image(uploaded_image, width=400)
 
+    col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
+
+    with col1:
+        st.write(' ')
+
+    with col2:
+
+        if uploaded_image is not None:
+            if not options:  # Check if a specie has been selected
+                st.error("Select a specie before we can help you out")
+            else:
+                selected_specie = options[0]  # Get the selected specie
+
+            if True:
+            # try:
+                response = send_image_to_api(uploaded_image, api_url)
+                if response:
+                    st.subheader(f"{(response['disease'].capitalize())}")
+                    st.image(uploaded_image, width=400)
+            # except requests.exceptions.RequestException as e:
+            #     st.error(f"An error occurred: {e}")
+
+    with col3:
+        st.write(' ')
+    
     st.title("ChatGPT ChatBot With Streamlit and OpenAI")
     if 'user_input' not in st.session_state:
         st.session_state['user_input'] = []
