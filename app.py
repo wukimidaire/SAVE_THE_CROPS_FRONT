@@ -110,14 +110,14 @@ with container:
             response = send_image_to_api(uploaded_image, api_url)
             if response:
                 if response["disease"] == "healthy":
-                    text_color = "#A6DDA8"
+                    text_color = "#071007"
                     message = "Grab a beer, your plants are fine!"
                 else:
-                    text_color = "#FF876B"
+                    text_color = "#FF2020"
                     message = f"Disease : {response['disease']}"
                     #st.subheader(f"{(response['disease'].capitalize())}")
 
-                st.markdown(f'<p style="text-align: center; color: {text_color}; font-size: 32px;">{message.capitalize()}</p>', unsafe_allow_html=True)
+                st.markdown(f'<p style="text-align: center; color: {text_color}; background-color:white; border-radius: 0.5rem; opacity:60%; font-size: 32px;">{message.capitalize()}</p>', unsafe_allow_html=True)
 
                 col1, col2, col3 = st.columns([0.2, 0.6, 0.2])
 
