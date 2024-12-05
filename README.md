@@ -1,6 +1,6 @@
 # Save the Crops Frontend
 
-Welcome to the **Save the Crops** frontend repository. This project is part of our Data Science & Machine Learning Bootcamp final project, developed collaboratively by our team. The frontend application serves as the user interface for our backend machine learning API, designed to diagnose plant diseases and provide insights to help farmers protect their crops.
+Welcome to the **Save the Crops** frontend repository. This project is part of our Data Science & Machine Learning Bootcamp final project (Le Wagon Data Science & ML bootcamp), developed collaboratively by our team. The frontend application serves as the user interface for our backend machine learning API, designed to diagnose plant diseases and provide insights to help farmers protect their crops.
 
 ## Project Overview
 
