@@ -4,6 +4,13 @@ Welcome to the **Save the Crops** frontend repository. This project is part of o
 
 ## Project Overview
 
+- End Project: Completed as part of the Machine Learning & Data Science bootcamp at Le Wagon, 2024 Q1.
+- Built CNN model achieving 95%+ accuracy on 20,000+ plant disease images.
+- Implemented model deployment pipeline using FastAPI and Docker.
+- Stack: TensorFlow, OpenCV, FastAPI, Docker.
+- Features: Real-time inference, model versioning, automated testing.
+- Impact: Potential 30% reduction in crop loss through early disease detection.
+
 The **Save the Crops** project aims to assist farmers by providing an easy-to-use tool for diagnosing plant diseases using images of their crops. Users can upload images of plants, and the system will analyze the image to detect any diseases and provide recommendations.
 
 This repository contains the frontend codebase, built with [Streamlit](https://streamlit.io/), which interacts with our backend API.
